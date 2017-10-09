@@ -45,7 +45,7 @@ public class LController : MonoBehaviour {
             }
             if (_TouchSpot.x < -.5f)
             {
-                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", 1);
+                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 0);
                 if (_FocusCount < _RController.allFocus.Count -1)
                 {
                     _FocusCount++;
@@ -57,12 +57,12 @@ public class LController : MonoBehaviour {
                 }
                 
                 _RController.focus = _RController.allFocus[_FocusCount];
-                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", _RController.outlineSize);
+                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 1);
                 //Controller.AddAsTargetUI(_RController.focus.GetComponent<GameObject>());
             }
             if (_TouchSpot.x > .5f)
             {
-                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", 1);
+                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 0);
                 if (_FocusCount > 0)
                 {
                     _FocusCount--;
@@ -74,7 +74,7 @@ public class LController : MonoBehaviour {
 
                 }
                 _RController.focus = _RController.allFocus[_FocusCount];
-                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", _RController.outlineSize);
+                _RController.focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 1);
                 //Controller.AddAsTargetUI(_RController.focus.GetComponent<GameObject>());
 
             }
@@ -117,7 +117,7 @@ public class LController : MonoBehaviour {
 
 	private void HandleTriggerClicked(object sender, ClickedEventArgs e)
 	{
-		print ("triggered");
+		//print ("triggered");
 		MenuPointer.clickMenuButton ();
 	}
 

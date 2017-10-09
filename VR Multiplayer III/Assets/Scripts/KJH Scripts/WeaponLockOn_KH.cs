@@ -43,10 +43,10 @@ public class WeaponLockOn_KH : MonoBehaviour {
 			if (rayHit.collider.GetComponent <Renderer>().material.shader == _controller.Outlineable) {
 				if (_controller.focus != rayHit.collider.GetComponent<Transform> ()) {
 					if (_controller.focus != null){
-						_controller.focus.GetComponent<Renderer>().material.SetFloat ("_OutlineWidth", 1);
+						_controller.focus.GetComponent<Renderer>().material.SetFloat ("_OutlineTransparency", 0);
 					}
 					_controller.focus = rayHit.collider.GetComponent<Transform> ();
-					_controller.focus.GetComponent<Renderer>().material.SetFloat ("_OutlineWidth", _controller.outlineSize);
+					_controller.focus.GetComponent<Renderer>().material.SetFloat ("_OutlineTransparency", 1);
 
 					if(Controller.AddAsTargetUI != null && _controller.focus.gameObject != null)
 						Controller.AddAsTargetUI(_controller.focus.gameObject);

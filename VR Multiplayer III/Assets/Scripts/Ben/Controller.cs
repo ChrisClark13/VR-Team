@@ -91,7 +91,7 @@ public class Controller : MonoBehaviour {
             gripped = false;
             if (focus != null)
             {
-                focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", 1);
+                focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 0);
                 focus = null;
             }
             if (AddAsTargetUI != null)

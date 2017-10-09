@@ -91,7 +91,7 @@ public class Controller : MonoBehaviour {
             gripped = false;
             if (focus != null)
             {
-                focus.GetComponent<Renderer>().material.SetFloat("_OutlineTransparency", 0);
+                focus.GetComponent<Renderer>().material.SetFloat("_OutlineWidth", 1);
                 focus = null;
             }
             if (AddAsTargetUI != null)
@@ -140,7 +140,6 @@ public class Controller : MonoBehaviour {
         if(meleeMode)
         {
             BaseMelee.ReleaseMeleeAttack();
-            SoundEngine_JR.meleeSound();
         }
 
     }
@@ -156,7 +155,6 @@ public class Controller : MonoBehaviour {
         {
             if(Shoot.shooter != null)
                 Shoot.shooter();
-            SoundEngine_JR.shootSound();
         }
     }
 

@@ -18,77 +18,6 @@ public class Mover : NetworkBehaviour {
     private float _forward;
     private bool _jumping;
     private float leftRight;
-    public Animator _thisAnim;
-
-
-    [SyncVar(hook = "OnChangeFloat")]
-    private float _currentFloatState;
-
-    [SyncVar(hook = "OnChangeTrigger")]
-    private String _currentTriggerState;
-
-    [SyncVar(hook = "OnChangeBool")]
-    private bool _currentBoolState;
-
-    public void OnChangeFloat(float state)
-    {
-        if (isLocalPlayer) return;
-        ChangeFloatState(state);
-    }
-
-    public void OnChangeTrigger(string trigger)
-    {
-        if (isLocalPlayer) return;
-        ChangeTriggerState(trigger);
-    }
-
-    public void OnChangeBool(bool _thisBool)
-    {
-        if (isLocalPlayer) return;
-        ChangeBoolState(_thisBool);
-    }
-
-    [Command]
-    public void CmdChangeFloatState(float state)
-    {
-        ChangeFloatState(state);
-    }
-    void ChangeFloatState(float state)
-    {
-        if (_currentFloatState != state)
-        {
-            _currentFloatState = state;
-            _thisAnim.SetFloat("speed", _currentFloatState);
-            //_thisAnim.SetFloat("Move Speed", _currentFloatState);
-
-        }
-    }
-
-    [Command]
-    public void CmdChangeTriggerState(string trigger)
-    {
-        ChangeTriggerState(trigger);
-
-    }
-    void ChangeTriggerState(string trigger)
-    {
-        _currentTriggerState = trigger;
-        _thisAnim.SetTrigger(_currentTriggerState);
-    }
-
-    [Command]
-    public void CmdChangeBoolState(bool _thisBool)
-    {
-        ChangeBoolState(_thisBool);
-    }
-    void ChangeBoolState(bool _thisBool)
-    {
-
-        _currentBoolState = _thisBool;
-        _thisAnim.SetBool("isRunning", _currentBoolState);
-        //_thisAnim.SetBool("Dead", _currentBoolState);
-
-    }
 
 
     // Use this for initialization
@@ -105,28 +34,6 @@ public class Mover : NetworkBehaviour {
         _jumping = false;
         _characterRigid = gameObject.GetComponent<Rigidbody>();
         CallMover += CallMoverHandler;
-        HeavyHit.Heavy += heavyAnimHandler;
-        LightHit.Light += lightAnimHandler;
-    }
-
-    private void heavyAnimHandler()
-    {
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("isAttacking");
-        CmdChangeTriggerState("isAttacking");
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("heavyAttack");
-        CmdChangeTriggerState("heavyAttack");
-    }
-
-    private void lightAnimHandler()
-    {
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("isAttacking");
-        CmdChangeTriggerState("isAttacking");
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("lightAttack");
-        CmdChangeTriggerState("lightAttack");
     }
 
     private void CallMoverHandler(/*string command,*/ Controller mover)
@@ -138,7 +45,6 @@ public class Mover : NetworkBehaviour {
         {
             if (!controller.gripped)
             {
-                
                 _jumping = true;
                 StartCoroutine(Jump());
                 // StartCoroutine(ForwardForce());
@@ -192,8 +98,8 @@ public class Mover : NetworkBehaviour {
         if (controller.touchSpot != new Vector2(0, 0) && !controller.gripped)
         {
             //set input value to always be positive
-            //if (controller.touchSpot != new Vector2(0,0))
-            //{
+            if (controller.touchSpot != new Vector2(0,0))
+            {
                 _forward = controller.device.GetAxis().x + controller.device.GetAxis().y;
                 if (_forward < 0)
                 {
@@ -201,26 +107,13 @@ public class Mover : NetworkBehaviour {
                 }
                 if (_forward > 1)
                 {
-                    _forward = 1;//*= .5f;
+                    _forward *= .5f;
                 }
-            //}
+            }
 
             //controls transformations
             _characterRigid.MovePosition(transform.localPosition + transform.TransformDirection(new Vector3(0 , 0, _forward)
                 ) * controller.moveSpeed * Time.deltaTime);
-            //_thisAnim.SetFloat("Move Speed", _forward);
-            _thisAnim.SetFloat("speed", controller.touchSpot.y);
-            CmdChangeFloatState(_forward);
-            if(controller.touchSpot.y > .7)
-            {
-                _thisAnim.SetBool("isRunning", true);
-                CmdChangeBoolState(true);
-            }
-            if (controller.touchSpot.y < .7)
-            {
-                _thisAnim.SetBool("isRunning", false);
-                CmdChangeBoolState(false);
-            }
 
             //controls rotation
             _newRotate = Mathf.Atan2(controller.device.GetAxis().y, (controller.device.GetAxis().x * -1)) * Mathf.Rad2Deg;
@@ -243,9 +136,6 @@ public class Mover : NetworkBehaviour {
             {
                 _characterRigid.MovePosition(transform.localPosition + transform.TransformDirection
                 (new Vector3(controller.touchSpot.x, 0, controller.touchSpot.y)) * controller.moveSpeed * Time.deltaTime);
-                //_thisAnim.SetFloat("Move Speed", controller.touchSpot.y);
-                _thisAnim.SetFloat("speed", controller.touchSpot.y);
-                CmdChangeFloatState(controller.touchSpot.y);
             }
 
         }
@@ -266,10 +156,6 @@ public class Mover : NetworkBehaviour {
 
     IEnumerator ForwardJump()
     {
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("Jump");
-        CmdChangeTriggerState("Jump");
-
         yield return new WaitForFixedUpdate();
         _characterRigid.AddForce(Vector3.up * controller.jumpSpeed * Time.deltaTime);
         _characterRigid.AddForce(transform.forward * controller.moveSpeed * controller.forwardJmpSpeed * Time.deltaTime);
@@ -279,10 +165,6 @@ public class Mover : NetworkBehaviour {
 
     IEnumerator BackJump()
     {
-        _currentTriggerState = null;
-        _thisAnim.SetTrigger("Dodge Back");
-        CmdChangeTriggerState("Dodge Back");
-
         yield return new WaitForFixedUpdate();
         _characterRigid.AddForce(Vector3.up * controller.jumpSpeed * Time.deltaTime);
         _characterRigid.AddForce((transform.forward * -1)* controller.moveSpeed * controller.forwardJmpSpeed * Time.deltaTime);

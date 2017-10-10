@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scene/Lobby.unity
+    path: Assets/Scenes/Lobby.unity
     guid: 283f91d2a3f18294bbfa77cff6529c74
   - enabled: 1
-    path: Assets/Scene/VR Multiplayer.unity
+    path: Assets/Scenes/VR Multiplayer.unity
     guid: a455df39e8d0ecc4186ab44ca49ce2ab

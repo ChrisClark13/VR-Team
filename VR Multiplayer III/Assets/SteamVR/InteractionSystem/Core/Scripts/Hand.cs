@@ -404,7 +404,7 @@ namespace Valve.VR.InteractionSystem
 				//Debug.Log( "Hand - checking controllers..." );
 
 				// Initialize both hands simultaneously
-				if ( startingHandType == HandType.Left || startingHandType == HandType.Right )
+				/*if ( startingHandType == HandType.Left || startingHandType == HandType.Right )
 				{
 					// Left/right relationship.
 					// Wait until we have a clear unique left-right relationship to initialize.
@@ -426,7 +426,7 @@ namespace Valve.VR.InteractionSystem
 					}
 				}
 				else
-				{
+				{*/
 					// No left/right relationship. Just wait for a connection
 
 					var vr = SteamVR.instance;
@@ -457,7 +457,7 @@ namespace Valve.VR.InteractionSystem
 
 						InitController( i );
 					}
-				}
+				//}
 			}
 		}
 
